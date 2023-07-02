@@ -4,7 +4,7 @@
         <hr class="mb-3">
         <form ref="mexForm" id="mexForm">
           <input
-            class="single-upload"
+            class="my-3 w-60"
             name="mexFile"
             @change="uploadedFile"
             type="file"
@@ -69,7 +69,7 @@ export default {
       const json = await response.json();
       this.message = json.message;
       this.status = json.status;
-      if (json.fileInfo) {
+      if (json) {
         console.log(json.fileInfo);
       }
     },
@@ -99,18 +99,6 @@ a {
   color: #d8a1d3;
 }
 
-.restore-container {
-  border: #42b983 2px solid;
-  border-radius: 10px;
-  background: #d2cdcd;
-  padding: 10px 0;
-}
-
-.single-upload {
-  align-self: center;
-  margin: 0 0 20px 50px;
-}
-
 .button {
   width: auto;
   align-self: center;
@@ -121,24 +109,5 @@ a {
   border-radius: 5px;
 }
 
-.restore-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-}
 
-.restore-options {
-  display: flex;
-  flex-direction: column;
-}
-
-.file-data {
-  display: flex;
-  justify-content: space-between;
-}
-
-.file-data .mex-container {
-  width: 46%;
-}
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="restore-container py-6">
-        <h2 class="text-3xl mb-3">Restore InDesign file with mex file, coming soon!</h2>
+        <h2 class="text-3xl mb-3">Restore InDesign file with mex file.</h2>
         <hr>
           <div class="restore-wrapper">
             <div class="restore-upload">

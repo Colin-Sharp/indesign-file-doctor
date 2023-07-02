@@ -29,7 +29,7 @@ app.post(
   "/mex",
   fileUpload({ createParentPath: true }),
   filesPayloadExists,
-  fileExtLimiter(['.mex']),
+  fileExtLimiter([".mex"]),
   (req, res) => {
     const files = req.files;
 
@@ -49,7 +49,7 @@ app.post(
             await fsPromises.unlink(filepath);
 
             let xmlFile;
-            
+
             await (async () => {
               files.forEach((file) => {
                 const fileExtension = getFileExtension(file.path);
@@ -57,7 +57,7 @@ app.post(
                   xmlFile = file;
                 }
               });
-            })()
+            })();
 
             const xmlData = await fsPromises.readFile(
               `./files/${xmlFile.path}`,
@@ -95,13 +95,11 @@ app.post(
   }
 );
 
-
-
 app.post(
-  "/indd",
+  "/idml",
   fileUpload({ createParentPath: true }),
   filesPayloadExists,
-  fileExtLimiter(['.indd']),
+  fileExtLimiter([".idml"]),
   (req, res) => {
     const files = req.files;
 
@@ -115,50 +113,55 @@ app.post(
         (async () => {
           try {
             // extract files for mex file.
-            const files = await decompress(`src/${name}`, "files");
+            const extractedFiles = await decompress(`src/${name}`, "files");
 
-            // delete mex file
+            // delete idml file
             await fsPromises.unlink(filepath);
 
             let xmlFile;
-            
+
             await (async () => {
-              files.forEach((file) => {
-                if (file.name === "designmap.xml") {
+              extractedFiles.forEach((file) => {
+                if (file.path === "designmap.xml") {
                   xmlFile = file;
                 }
               });
-            })()
+            })();
 
             const xmlData = await fsPromises.readFile(
               `./files/${xmlFile.path}`,
               "utf8"
             );
-            
 
-            // get the data from
-            // const xml = await (async () => {
-            //   var $ = cheerio.load(xmlData);
-            //   var design = $('[name="InDesignData"]').html().toString();
-            //   var toAString = JSON.stringify(design);
-            //   var removeEnds = toAString
-            //     .replace("\x3C!--[CDATA[", "")
-            //     .replace("]]&gt;", "");
-            //   return JSON.parse(removeEnds);
-            // })();
+            const xml = await (async () => {
+              var $ = cheerio.load(xmlData);
+              const newValues = {};
+              var variable = $('[key="MEGAEDITvariable"]').attr("value");
+              var logic = $('[key="MEGAEDITlogic"]').attr("value");
+              var form = $('[key="MEGAEDITforms"]').attr("value");
+              var resource = $('[key="MEGAEDITresource"]').attr("value");
 
-            console.log(xmlData);
-            // delete files folder
+              newValues.form = await getValues(form);
+              newValues.logic = await getValues(logic);
+              newValues.variable = await getValues(variable);
+              newValues.resource = await getValues(resource);
+
+              return newValues;
+            })();
+
+            // delete files dir
             await rimraf("files");
 
             return res.json({
               status: "Success",
-              message: "Life is good!"
+              message: "Life is good!",
+              fileInfo: xml,
             });
           } catch (error) {
             return res.status(500).json({
               status: "error",
-              message: error,
+              message:
+                "Something went wrong are you sure the you are using the right file?",
             });
           }
         })();
@@ -167,11 +170,22 @@ app.post(
   }
 );
 
+async function getValues(value) {
+  if (value) {
+    try {
+      return await JSON.parse(value);
+    } catch {
+      return "BROKEN";
+    }
+  } else {
+    return "";
+  }
+}
 
 // helper functions
 function getFileExtension(path) {
-  return path.split('.').pop();
-};
+  return path.split(".").pop();
+}
 
 app.listen(PORT, () => {
   console.log(`MESS (Mongo Event Sourcing) listening at http://localhost:3000`);

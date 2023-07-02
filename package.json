@@ -4,6 +4,7 @@
   "description": "finding problems with files",
   "main": "src/main.js",
   "scripts": {
+    "build": "webpack cd ./vue-doctor && npm run build",
     "serve": "node src/main.js cd ./vue-doctor && npm run build",
     "dev": "supervisor  src/main.js"
   },
