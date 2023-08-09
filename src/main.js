@@ -67,12 +67,15 @@ app.post(
             // get the data from
             const xml = await (async () => {
               var $ = cheerio.load(xmlData);
-              var design = $('[name="InDesignData"]').html().toString();
-              var toAString = JSON.stringify(design);
-              var removeEnds = toAString
-                .replace("\x3C!--[CDATA[", "")
-                .replace("]]&gt;", "");
-              return JSON.parse(removeEnds);
+              var design = $('[name="InDesignData"]').html();
+              var removeEnds = design
+              .replace("<!--[CDATA[", "")
+              .replace("]]&gt;", "")
+              .replace("]]-->", "");
+              
+              var designObject = await getValues(removeEnds);
+
+            return designObject;
             })();
 
             // delete files folder
@@ -80,7 +83,7 @@ app.post(
 
             return res.json({
               status: "Success",
-              message: "Life is good!",
+              message: "View the details",
               fileInfo: xml,
             });
           } catch (error) {
@@ -154,7 +157,7 @@ app.post(
 
             return res.json({
               status: "Success",
-              message: "Life is good!",
+              message: "View the details",
               fileInfo: xml,
             });
           } catch (error) {

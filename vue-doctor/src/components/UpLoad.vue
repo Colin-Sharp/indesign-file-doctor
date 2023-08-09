@@ -15,51 +15,59 @@
         <button type="button" @click="sendFile" class="button">
           Get file Info
         </button>
-        <p class="my-3" v-if="status !== ''">Status: {{ status }}</p>
-        <p>{{ message }}</p>
+        <button v-if="state.status === 'Success'" type="button" @click="goToDetails" class="button ml-3">
+          View File details
+        </button>
+        <p class="my-3" v-if="state.status !== ''">Status: {{ state.status }}. {{ state.message }}</p>
       </div>
 </template>
 
-
 <script>
-import FileInfo from "./FileInfo.vue";
+import { reactive } from 'vue';
+import router from '@/router';
+import { useFileStore } from '@/store';
 
 export default {
-  components: { FileInfo },
   name: "UpLoad",
-  component: {
-    FileInfo,
-  },
   props: {
     fileType: String
   },
-  data: () => {
-    return {
+  setup(props) {
+    const state = reactive({
       message: "",
       file: null,
-      currentForm: null,
-      status: "",
-      open: false,
+      fileInfo: null,
+      status: ""
+    });
+
+    const store = useFileStore();
+
+    function uploadedFile(event) {
+      state.file = event.target.files;
     };
-  },
-  methods: {
-    uploadedFile(event) {
-      this.file = event.target.files;
-    },
-    sendFile: async function () {
+
+    function goToDetails() {
+      store.setFileInfo(state.fileInfo);
+      
+      router.push({
+        path: '/details'
+      })
+    }
+
+    const sendFile = async () => {
       const formData = new FormData();
 
-      if (!this.file) {
-        this.status = "error";
-        this.message = `You need to upload a ${this.fileType} file.`; 
+      if (!state.file) {
+        state.status = "error";
+        state.message = `You need to upload a ${props.fileType} file.`; 
         return;
       }
 
-      Object.keys(this.file).forEach((key) => {
-        formData.append(this.file.item(key).name, this.file.item(key));
+      Object.keys(state.file).forEach((key) => {
+        formData.append(state.file.item(key).name, state.file.item(key));
       });
 
-      const response = await fetch(`${process.env.VUE_APP_APIURL}/${this.fileType}`, {
+      const response = await fetch(`${process.env.VUE_APP_APIURL}/${props.fileType}`, {
         method: "POST",
         body: formData,
       }).catch((err) => {
@@ -67,17 +75,28 @@ export default {
       });
 
       const json = await response.json();
-      this.message = json.message;
-      this.status = json.status;
+      state.message = json.message;
+      state.status = json.status;
+
+      if (props.fileType === 'mex') {
+        state.fileInfo = json.fileInfo
+      }
+
       if (json) {
         console.log(json.fileInfo);
       }
-    },
-  },
-};
+    }
+
+    return {
+      state,
+      uploadedFile,
+      sendFile,
+      goToDetails
+    }
+  }
+}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;

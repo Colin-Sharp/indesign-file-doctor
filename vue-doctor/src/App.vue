@@ -1,29 +1,14 @@
 <template>
-  <div id="app">
-    <h1 class="my-10 text-4xl">File Doctor</h1>
-    <extract-file-data fileType="mex" />
-    <div class="flex max-w-6xl mx-auto">
-      <UpLoad class="w-6/12 mr-2" fileType="mex" />
-      <UpLoad class="w-6/12 ml-2" fileType="idml" />
-    </div>
-    <div class="flex max-w-6xl mx-auto mt-3">
-      <RestoreData />
-    </div>
+  <!-- <div id="app">
+  </div> -->
+  <div>
+    <router-view />
   </div>
 </template>
 
 <script>
-import ExtractFileData from './components/ExtractFileData.vue';
-import UpLoad from './components/UpLoad.vue';
-import RestoreData from './components/RestoreData.vue';
-
 export default {
   name: 'App',
-  components: {
-    ExtractFileData,
-    UpLoad,
-    RestoreData
-  }
 };
 </script>
 

@@ -1,12 +1,8 @@
 <template>
     <div class="restore-container py-6">
-        <h2 class="text-3xl mb-3">Restore InDesign file with mex file.</h2>
+        <h2 class="text-3xl mb-3">Create script to restore InDesign values with mex file.</h2>
         <hr>
           <div class="restore-wrapper">
-            <div class="restore-upload">
-              <h2>InDesign file</h2>
-              <input class="single-upload" @change="uploadedFile" type="file" id="restoreFilesIndd" multiple />
-            </div>
             <div class="restore-options">
               <label for="cars">What do you want to restore?</label>
               <select name="cars" id="cars">
