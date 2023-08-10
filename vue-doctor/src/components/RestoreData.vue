@@ -41,11 +41,11 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: #F87575;
 }
 
 .mex-container {
-  border: #42b983 2px solid;
+  border: #F87575 2px solid;
   border-radius: 10px;
   padding: 50px 0;
   display: flex;
@@ -59,8 +59,8 @@ a {
 
 .restore-container {
   width: 100%;
-  background: #235454;
-  color: #d8a1d3;
+  background: #4A4E69;
+  color: #F87575;
 }
 
 .single-upload {
@@ -73,7 +73,7 @@ a {
   align-self: center;
   padding: 10px;
   color: white;
-  background: #42b983;
+  background: #F87575;
   border: none;
   border-radius: 5px;
 }

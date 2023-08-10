@@ -78,11 +78,8 @@ export default {
       state.message = json.message;
       state.status = json.status;
 
-      if (props.fileType === 'mex') {
-        state.fileInfo = json.fileInfo
-      }
-
       if (json) {
+        state.fileInfo = json.fileInfo
         console.log(json.fileInfo);
       }
     }
@@ -110,12 +107,12 @@ li {
   margin: 0 10px;
 }
 a {
-  color: #42b983;
+  color: #F87575;
 }
 
 .upload {
-  background: #235454;
-  color: #d8a1d3;
+  background: #4A4E69;
+  color: #F87575;
 }
 
 .button {
@@ -123,7 +120,7 @@ a {
   align-self: center;
   padding: 10px;
   color: white;
-  background: #42b983;
+  background: #F87575;
   border: none;
   border-radius: 5px;
 }

@@ -26,7 +26,7 @@
   
   <style>
   h1 {
-    color: #d8a1d3;
+    color: #F87575;
   }
   body {
     background: #171718;
